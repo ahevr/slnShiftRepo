@@ -57,20 +57,20 @@ class App extends React.Component {
     });
     const offDays = filteredSchedule.filter(row => row[1] === 'OFF');
     const offDaysCount = offDays.length;
+    const { schedule } = this.state;
+    const totalDataCount = schedule.length;
 
     return (
       <div className='container'>
-        {/* Kullanıcı bilgilerini gösteren kart */}
         <div className="card mt-5">
           <div className="card-body bg-dark text-white">
             <h5 className="card-title">Kullanıcı Bilgileri</h5>
-            <p>Sicil: {this.state.userInfo.sicil}</p>
-            <p>Ad Soyad: {this.state.userInfo.adSoyad}</p>
-            <p>Departman: {this.state.userInfo.departman}</p>
-            <p>Görev: {this.state.userInfo.gorev}</p>
-            <p>Ekip: {this.state.userInfo.ekip}</p>
-            <p>Servis: {this.state.userInfo.servis}</p>
-            <p>Skill: {this.state.userInfo.skill}</p>
+            <p style={{fontSize: '14px'}} >Sicil: {this.state.userInfo.sicil}</p>
+            <p style={{fontSize: '14px'}} >Ad Soyad: {this.state.userInfo.adSoyad}</p>
+            <p style={{fontSize: '14px'}} >Departman: {this.state.userInfo.departman}</p>
+            <p style={{fontSize: '14px'}} >Görev: {this.state.userInfo.gorev}</p>
+            <p style={{fontSize: '14px'}} >Ekip: {this.state.userInfo.ekip}</p>
+            <p style={{fontSize: '14px'}} >Servis: {this.state.userInfo.servis}</p>
           </div>
         </div>
 
@@ -78,6 +78,7 @@ class App extends React.Component {
         <div className="mt-5">
           <input
             type="text"
+            style={{height: '50px'}}
             className="form-control"
             placeholder="Tarihi arayın..."
             value={this.state.searchQuery}
@@ -86,7 +87,8 @@ class App extends React.Component {
         </div>
         {/* Çalışma programını gösteren tablo */}
         <h1 className='my-5 text-center'>Çalışma Programı</h1>
-        <p className='text-center font-weight-bold'>Toplam <span>{offDaysCount}</span> gün OFF</p>
+        <p className='text-center font-weight-bold'>Toplam Çalışılacak Gün Sayısı: <span style={{fontSize: '20px',color:'orange'}}>{totalDataCount-offDaysCount}</span>  </p>
+        <p className='text-center font-weight-bold'>Toplam <span style={{color: 'orange',fontSize:'20px'}} >{offDaysCount}</span> gün OFF</p>
         <table className="table table-dark table-striped-columns">
           <thead>
             <tr>
