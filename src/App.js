@@ -62,7 +62,7 @@ class App extends React.Component {
 
     return (
       <div className='container'>
-        <div className="card mt-5">
+        {/* <div className="card mt-5">
           <div className="card-body bg-dark text-white">
             <h5 className="card-title">Kullanıcı Bilgileri</h5>
             <p style={{fontSize: '14px'}} >Sicil: {this.state.userInfo.sicil}</p>
@@ -72,7 +72,7 @@ class App extends React.Component {
             <p style={{fontSize: '14px'}} >Ekip: {this.state.userInfo.ekip}</p>
             <p style={{fontSize: '14px'}} >Servis: {this.state.userInfo.servis}</p>
           </div>
-        </div>
+        </div> */}
 
         {/* Arama kutusu */}
         <div className="mt-5">
