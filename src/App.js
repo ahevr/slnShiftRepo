@@ -38,7 +38,7 @@ class App extends React.Component {
             skill: jsonData[1][6]
           };
           // Tarihleri gün, ay ve yıl olarak dönüştürme ve state'i güncelleme
-          const formattedData = jsonData.slice(1);
+          const formattedData = jsonData.slice(2);
           // State'i güncelleme
           this.setState({ userInfo, schedule: formattedData });
         };
