@@ -41,10 +41,11 @@ class App extends React.Component {
           };
           // Tarihleri gün, ay ve yıl olarak dönüştürme ve state'i güncelleme
           const formattedData = jsonData.slice(2).map(row => {
-            const [rawDate, workingHours] = row;
+            const [rawDate, workingHours] = row.slice(0, 2); // Çalışma saatlerini al
             const date = this.excelDateToJSDate(rawDate);
-            return [date.toLocaleDateString(), date.toLocaleTimeString(), workingHours];
+            return [date.toLocaleDateString(), workingHours, row[2]]; // Çalışma saatleri ekleniyor
           });
+
           // Bugünkü vardiyayı ve selamlamayı alın
           const today = new Date();
           const todayDate = today.toLocaleDateString();
@@ -121,7 +122,7 @@ class App extends React.Component {
         <p className='text-center font-weight-bold'>Toplam Çalışılacak Gün Sayısı: <span style={{ fontSize: '20px', color: 'orange' }}>{totalDataCount - offDaysCount}</span>  </p>
         <p className='text-center font-weight-bold'>Toplam <span style={{ color: 'orange', fontSize: '20px' }}>{offDaysCount}</span> gün OFF</p>
         <p className='text-center font-weight-bold'>
-          <span style={{ fontSize: '13px' }}>Merhaba {this.state.userInfo.adSoyad} {greeting} <br/> Bugün günlerden {today} <br/> Bugünkü vardiyanız: {todayShift}</span>
+          <span style={{ fontSize: '13px' }}>Merhaba {this.state.userInfo.adSoyad} {greeting} <br/> Bugün günlerden {today} <br/> bugünkü vardiyanız: {todayShift}</span>
         </p>
         <table className="table table-dark table-striped-columns">
           <thead>
