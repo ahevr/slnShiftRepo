@@ -7,7 +7,9 @@ class App extends React.Component {
     this.state = {
       userInfo: {},
       schedule: [],
-      searchQuery: ''
+      searchQuery: '',
+      todayShift: '',
+      greeting: ''
     };
   }
 
@@ -38,12 +40,40 @@ class App extends React.Component {
             skill: jsonData[1][6]
           };
           // Tarihleri gün, ay ve yıl olarak dönüştürme ve state'i güncelleme
-          const formattedData = jsonData.slice(2);
+          const formattedData = jsonData.slice(2).map(row => {
+            const [rawDate, workingHours] = row;
+            const date = this.excelDateToJSDate(rawDate);
+            return [date.toLocaleDateString(), date.toLocaleTimeString(), workingHours];
+          });
+          // Bugünkü vardiyayı ve selamlamayı alın
+          const today = new Date();
+          const todayDate = today.toLocaleDateString();
+          const todayTime = today.toLocaleTimeString();
+          const todayShift = formattedData.find(([date]) => date === todayDate)[2];
+          const greeting = this.getGreeting(todayTime);
           // State'i güncelleme
-          this.setState({ userInfo, schedule: formattedData });
+          this.setState({ userInfo, schedule: formattedData, todayShift, greeting });
         };
         reader.readAsArrayBuffer(blob);
       });
+  }
+  // Excel'deki tarih sayısını gerçek bir tarihe dönüştürme
+  excelDateToJSDate(excelDate) {
+    return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+  }
+
+  // Saate göre selamlama mesajını döndürme işlevi
+  getGreeting(time) {
+    const hour = parseInt(time.split(':')[0]);
+    if (hour >= 6 && hour < 12) {
+      return 'Günaydın';
+    } else if (hour >= 12 && hour < 18) {
+      return 'İyi günler';
+    } else if (hour >= 18 && hour < 22) {
+      return 'İyi akşamlar';
+    } else {
+      return 'İyi geceler';
+    }
   }
 
   handleSearchChange = event => {
@@ -55,14 +85,16 @@ class App extends React.Component {
       const [date] = row;
       return String(date).includes(this.state.searchQuery);
     });
-    const offDays = filteredSchedule.filter(row => row[1] === 'OFF');
+    const offDays = filteredSchedule.filter(row => row[2] === 'OFF');
     const offDaysCount = offDays.length;
-    const { schedule } = this.state;
+    const { schedule, todayShift, greeting } = this.state;
     const totalDataCount = schedule.length;
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const today = new Date().toLocaleDateString('tr-TR', options);
 
     return (
       <div className='container'>
-        {/* <div className="card mt-5">
+         {/* <div className="card mt-5">
           <div className="card-body bg-dark text-white">
             <h5 className="card-title">Kullanıcı Bilgileri</h5>
             <p style={{fontSize: '14px'}} >Sicil: {this.state.userInfo.sicil}</p>
@@ -73,12 +105,11 @@ class App extends React.Component {
             <p style={{fontSize: '14px'}} >Servis: {this.state.userInfo.servis}</p>
           </div>
         </div> */}
-
         {/* Arama kutusu */}
         <div className="mt-5">
           <input
             type="text"
-            style={{height: '50px'}}
+            style={{ height: '50px' }}
             className="form-control"
             placeholder="Tarihi arayın..."
             value={this.state.searchQuery}
@@ -87,8 +118,11 @@ class App extends React.Component {
         </div>
         {/* Çalışma programını gösteren tablo */}
         <h1 className='my-5 text-center'>Çalışma Programı</h1>
-        <p className='text-center font-weight-bold'>Toplam Çalışılacak Gün Sayısı: <span style={{fontSize: '20px',color:'orange'}}>{totalDataCount-offDaysCount}</span>  </p>
-        <p className='text-center font-weight-bold'>Toplam <span style={{color: 'orange',fontSize:'20px'}} >{offDaysCount}</span> gün OFF</p>
+        <p className='text-center font-weight-bold'>Toplam Çalışılacak Gün Sayısı: <span style={{ fontSize: '20px', color: 'orange' }}>{totalDataCount - offDaysCount}</span>  </p>
+        <p className='text-center font-weight-bold'>Toplam <span style={{ color: 'orange', fontSize: '20px' }}>{offDaysCount}</span> gün OFF</p>
+        <p className='text-center font-weight-bold'>
+          <span style={{ fontSize: '13px' }}>Merhaba {this.state.userInfo.adSoyad} {greeting} <br/> Bugün günlerden {today} <br/> Bugünkü vardiyanız: {todayShift}</span>
+        </p>
         <table className="table table-dark table-striped-columns">
           <thead>
             <tr>
@@ -99,8 +133,18 @@ class App extends React.Component {
           <tbody>
             {filteredSchedule.map((row, index) => (
               <tr key={index}>
-                <td style={{backgroundColor: row[1] === 'OFF' ? 'orange' : 'inherit', fontWeight: 'bold'}}>{row[0]}</td>
-                <td style={{backgroundColor: row[1] === 'OFF' ? 'orange' : 'inherit', fontWeight: 'bold'}}>{row[1]}</td>
+                <td>
+                  <span
+                    style={{
+                      textDecoration: new Date(row[0]) < new Date() ? 'line-through' : 'none',
+                      backgroundColor: row[2] === 'OFF' ? 'orange' : 'inherit',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {row[0]}
+                  </span>
+                </td>
+                <td style={{ backgroundColor: row[2] === 'OFF' ? 'orange' : 'inherit', fontWeight: 'bold' }}>{row[1]}</td>
               </tr>
             ))}
           </tbody>
