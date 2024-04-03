@@ -86,12 +86,13 @@ class App extends React.Component {
       const [date] = row;
       return String(date).includes(this.state.searchQuery);
     });
-    const offDays = filteredSchedule.filter(row => row[2] === 'OFF');
+    const offDays = filteredSchedule.filter(row => row[1] === 'OFF');
     const offDaysCount = offDays.length;
     const { schedule, todayShift, greeting } = this.state;
     const totalDataCount = schedule.length;
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const today = new Date().toLocaleDateString('tr-TR', options);
+
 
     return (
       <div className='container'>
@@ -137,15 +138,15 @@ class App extends React.Component {
                 <td>
                   <span
                     style={{
-                      textDecoration: new Date(row[0]) < new Date() ? 'line-through' : 'none',
-                      backgroundColor: row[2] === 'OFF' ? 'orange' : 'inherit',
+                      textDecoration: new Date(row[0].replace(/\./g, '/')) < new Date() ? 'line-through' : 'none',
+                      backgroundColor: row[1] === 'OFF' ? 'orange' : 'inherit',
                       fontWeight: 'bold'
                     }}
                   >
                     {row[0]}
                   </span>
                 </td>
-                <td style={{ backgroundColor: row[2] === 'OFF' ? 'orange' : 'inherit', fontWeight: 'bold' }}>{row[1]}</td>
+                <td style={{ backgroundColor: row[1] === 'OFF' ? 'orange' : 'inherit', fontWeight: 'bold' }}>{row[1]}</td>
               </tr>
             ))}
           </tbody>
