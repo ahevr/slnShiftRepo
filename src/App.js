@@ -48,7 +48,7 @@ class App extends React.Component {
 
           // Bugünkü vardiyayı ve selamlamayı alın
           const today = new Date();
-          const todayDate = today.toLocaleDateString();
+          // const todayDate = today.toLocaleDateString();
           const todayTime = today.toLocaleTimeString();
           // const todayShift = formattedData.find(([date]) => date === todayDate)[2];
           const greeting = this.getGreeting(todayTime);
@@ -98,17 +98,6 @@ class App extends React.Component {
 
     return (
       <div className='container'>
-        {/* <div className="card mt-5">
-          <div className="card-body bg-dark text-white">
-            <h5 className="card-title">Kullanıcı Bilgileri</h5>
-            <p style={{fontSize: '14px'}} >Sicil: {this.state.userInfo.sicil}</p>
-            <p style={{fontSize: '14px'}} >Ad Soyad: {this.state.userInfo.adSoyad}</p>
-            <p style={{fontSize: '14px'}} >Departman: {this.state.userInfo.departman}</p>
-            <p style={{fontSize: '14px'}} >Görev: {this.state.userInfo.gorev}</p>
-            <p style={{fontSize: '14px'}} >Ekip: {this.state.userInfo.ekip}</p>
-            <p style={{fontSize: '14px'}} >Servis: {this.state.userInfo.servis}</p>
-          </div>
-        </div> */}
         {/* Arama kutusu */}
         <div className="mt-5">
           <input
