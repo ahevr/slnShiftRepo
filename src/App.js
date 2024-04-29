@@ -50,10 +50,11 @@ class App extends React.Component {
           const today = new Date();
           const todayDate = today.toLocaleDateString();
           const todayTime = today.toLocaleTimeString();
-          const todayShift = formattedData.find(([date]) => date === todayDate)[2];
+          // const todayShift = formattedData.find(([date]) => date === todayDate)[2];
           const greeting = this.getGreeting(todayTime);
           // State'i güncelleme
-          this.setState({ userInfo, schedule: formattedData, todayShift, greeting });
+          // this.setState({ userInfo, schedule: formattedData, todayShift, greeting });
+          this.setState({ userInfo, schedule: formattedData, greeting });
         };
         reader.readAsArrayBuffer(blob);
       });
@@ -88,7 +89,8 @@ class App extends React.Component {
     });
     const offDays = filteredSchedule.filter(row => row[1] === 'OFF');
     const offDaysCount = offDays.length;
-    const { schedule, todayShift, greeting } = this.state;
+    // const { schedule, todayShift, greeting } = this.state;
+    const { schedule, greeting } = this.state;
     const totalDataCount = schedule.length;
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const today = new Date().toLocaleDateString('tr-TR', options);
@@ -96,7 +98,7 @@ class App extends React.Component {
 
     return (
       <div className='container'>
-         {/* <div className="card mt-5">
+        {/* <div className="card mt-5">
           <div className="card-body bg-dark text-white">
             <h5 className="card-title">Kullanıcı Bilgileri</h5>
             <p style={{fontSize: '14px'}} >Sicil: {this.state.userInfo.sicil}</p>
@@ -123,7 +125,8 @@ class App extends React.Component {
         <p className='text-center font-weight-bold'>Toplam Çalışılacak Gün Sayısı: <span style={{ fontSize: '20px', color: 'orange' }}>{totalDataCount - offDaysCount}</span>  </p>
         <p className='text-center font-weight-bold'>Toplam <span style={{ color: 'orange', fontSize: '20px' }}>{offDaysCount}</span> gün OFF</p>
         <p className='text-center font-weight-bold'>
-          <span style={{ fontSize: '13px' }}>Merhaba {this.state.userInfo.adSoyad} {greeting} <br/> Bugün günlerden {today} <br/> bugünkü vardiyanız: {todayShift}</span>
+          {/* <span style={{ fontSize: '13px' }}>Merhaba {this.state.userInfo.adSoyad} {greeting} <br/> Bugün günlerden {today} <br/> bugünkü vardiyanız: {todayShift}</span> */}
+          <span style={{ fontSize: '13px' }}>Merhaba {this.state.userInfo.adSoyad} {greeting} <br/> Bugün günlerden {today} <br/></span>
         </p>
         <table className="table table-dark table-striped-columns">
           <thead>
@@ -138,15 +141,15 @@ class App extends React.Component {
                 <td>
                   <span
                     style={{
-                      textDecoration: new Date(row[0].replace(/\./g, '/')) < new Date() ? 'line-through' : 'none',
-                      backgroundColor: row[1] === 'OFF' ? 'orange' : 'inherit',
+                      textDecoration: new Date(row[0].replace(/\./g, '/')) < new Date() ? '' : 'none',
+                      backgroundColor: row[1] === 'OFF' ? 'orange' : '',
                       fontWeight: 'bold'
                     }}
                   >
                     {row[0]}
                   </span>
                 </td>
-                <td style={{ backgroundColor: row[1] === 'OFF' ? 'orange' : 'inherit', fontWeight: 'bold' }}>{row[1]}</td>
+                <td style={{ backgroundColor: row[1] === 'OFF' ? 'orange' : '', fontWeight: 'bold' }}>{row[1]}</td>
               </tr>
             ))}
           </tbody>
